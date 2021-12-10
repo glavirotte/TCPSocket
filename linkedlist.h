@@ -9,5 +9,6 @@ int isValid(int c, int clientfd);
 char* getPseudoFromID(int c_id);
 int getIDFromPseudo(char * pseudo);
 char* extractPseudo(char* buffer);
+char* extractFirstMessage(char* buffer);
 
 #endif

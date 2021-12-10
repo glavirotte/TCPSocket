@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
 	portno = atoi(argv[2]);						// Récupération du numéro de port 
 	char* pseudo = malloc(sizeof(char)*50);
 	strcpy(pseudo, argv[3]);					// Récupération du pseudo
-	printf("\nBonjour %s !\n", pseudo);
+	printf("\n---  Bonjour %s ! ---\n\n", pseudo);
 
 // 1) Socket function
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);	// Création de la socket
@@ -51,17 +51,17 @@ int main(int argc, char *argv[]){
 		perror("Connection Error");
 		exit(1);
 	}
-	else{
-		printf("\n[+] %s s'est connecté au serveur !\n", pseudo);
-	}
 
 	bzero(buffer, BUF_SIZE);
 	if(read(sockfd, buffer, BUF_SIZE)< 0){			// Lecture des données envoyées sur la socket
  		perror("\nError in sending client id");
  		exit(1);
  	}
-	printf("[+] Vos messages seront envoyés au serveur.\n[+] Si vous n'êtes connécté à aucun client, vous recevrez votre message comme réponse du serveur!\n\n");
-
+	printf("[+] Vos messages seront envoyés au serveur.\n[+] Si vous n'êtes connécté à aucun client, vous recevrez votre message comme réponse du serveur!\n");
+	printf("[+] Pour voir les personnes présentes sur le serveur: Liste\n");
+	printf("[+] Pour vous connecter à quelqu'un: Envoi [pseudo]\n");
+	printf("[+] Pour vous déconnecter de quelqu'un: Quit\n");
+	printf("[+] Pour arrêter le programme: CTRL + C ou Exit\n\n");
 
 	bzero(buffer, BUF_SIZE);						// Remise à z&ro du buffer
 	retval = write(sockfd, pseudo, strlen(pseudo));	// Ecriture du pseudo sur la socket

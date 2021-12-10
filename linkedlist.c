@@ -170,11 +170,34 @@ char* extractPseudo(char* buffer){
   char c = buffer[0];
   int i = 0;
 
-  while(c != '\n'){
+  while(c != '\n' && c != ' '){
     *(pseudo+i) = *(buffer+i);
     i++;
     c = buffer[i];
   }
   return pseudo;
+
+}
+
+char* extractFirstMessage(char* buffer){
+  char * message = malloc(sizeof(char)*500);
+  char c = buffer[0];
+  int i = 0;
+  int j = 0;
+
+  while(c != ' '){
+    i++;
+    c = buffer[i];
+  }
+
+  i++;
+
+  while(c != '\n'){
+    *(message+j) = *(buffer+i);
+    i++;
+    j++;
+    c = buffer[i];
+  }
+  return message;
 
 }

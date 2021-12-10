@@ -50,19 +50,32 @@ void* socketChat(void *arg){
 			break;
 		}
 		printf("Client %d (%s): %s", clientfd, getPseudoFromID(clientfd), buffer);
-		if(strncmp(buffer, "exit", 4) == 0 || strlen(buffer) < 1){
+		if(strncmp(buffer, "Exit", 4) == 0 || strlen(buffer) < 1){
 			result = clientfd;
 			break;
 		}
 		else if(strncmp(buffer,"Envoi", 5)==0){
 			char * tmp = extractPseudo(buffer + 6);
 			targetclient = getIDFromPseudo(tmp);
+			char * firstMessage = malloc(sizeof(char)* 500);
+			firstMessage = extractFirstMessage(buffer + 6);
 			if(isValid(targetclient, clientfd) == 1){
 				printf("[+] Client %s est connecté au client %s\n", getPseudoFromID(clientfd), getPseudoFromID(targetclient));
+
+				// bzero(buffer, BUF_SIZE);							// Problème ! le message arrive plus tard
+				// result = targetclient;
+				// strcpy(buffer, firstMessage);
+				// retval = write(result, buffer, strlen(buffer));
+				// if(retval < 0){
+				// 	perror("Writing Error");
+				// 	break;
+				// }
+
 				bzero(buffer, BUF_SIZE);
 				strcpy(buffer, "Connexion réussie !\n");
 				result = clientfd;
 				fflush(stdin);
+				free(firstMessage);
 			}
 			else{
 				printf("[+] %s ne peut pas se connecter à %s\n", getPseudoFromID(clientfd), getPseudoFromID(targetclient));
@@ -78,13 +91,25 @@ void* socketChat(void *arg){
 			result = clientfd;
 			fflush(stdin);
 		}
-		else if(strncmp(buffer,"quit",4)==0){
+		else if(strncmp(buffer,"Quit",4)==0){
 			printf("\n[+] %s s'est déconnecté de %s\n", getPseudoFromID(clientfd), getPseudoFromID(targetclient));
+			bzero(buffer, BUF_SIZE);
+			result = targetclient;
+
+			strcpy(buffer, strcat(getPseudoFromID(clientfd), " s'est déconnecté !\n"));
+
+			retval = write(result, buffer, strlen(buffer));
+			if(retval < 0){
+				perror("Writing Error");
+				break;
+			}
+
 			bzero(buffer, BUF_SIZE);
 			strcpy(buffer, "Déconnexion réussie !\n");
 			targetclient=-1;
 			result = clientfd;
 			fflush(stdin);
+
 		}
 		else{
 			result = targetclient;
