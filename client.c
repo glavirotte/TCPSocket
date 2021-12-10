@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 	printf("\nBonjour %s !\n", pseudo);
 
 // 1) Socket function
-	sockfd = socket(AF_INET, SOCK_STREAM, 0);	//
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);	// Création de la socket
 	if(sockfd < 0){
 		perror("Socket creation Error");
 		exit(1);
@@ -37,17 +37,17 @@ int main(int argc, char *argv[]){
 
 	bzero((char *)&server_addr, sizeof(server_addr));	//Fonction de remise à zéro du buffer
 
-	// set the values in structure
+	// configuration des données de la structure
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = inet_addr(argv[1]);	//
 	if(server_addr.sin_addr.s_addr == -1){
 		perror("Inet conversion Error");
 		exit(1);
 	}
-	server_addr.sin_port = htons(portno);
+	server_addr.sin_port = htons(portno);		// 
 
-// Fonction qui gère la connection au serveur à partir de la socket
-	if(connect(sockfd, (struct sockaddr*) &server_addr, sizeof(server_addr)) < 0){ 
+	// Fonction qui gère la connection au serveur à partir de la socket
+	if(connect(sockfd, (struct sockaddr*) &server_addr, sizeof(server_addr)) < 0){ 	// Vérification de la connexion
 		perror("Connection Error");
 		exit(1);
 	}
@@ -56,14 +56,14 @@ int main(int argc, char *argv[]){
 	}
 
 	bzero(buffer, BUF_SIZE);
-	if(read(sockfd, buffer, BUF_SIZE)< 0){
+	if(read(sockfd, buffer, BUF_SIZE)< 0){			// Lecture des données envoyées sur la socket
  		perror("\nError in sending client id");
  		exit(1);
  	}
 	printf("[+] Vos messages seront envoyés au serveur.\n[+] Si vous n'êtes connécté à aucun client, vous recevrez votre message comme réponse du serveur!\n\n");
 
 
-	bzero(buffer, BUF_SIZE);
+	bzero(buffer, BUF_SIZE);						// Remise à z&ro du buffer
 	retval = write(sockfd, pseudo, strlen(pseudo));	// Ecriture du pseudo sur la socket
 	if(retval < 0){									// Analyse des erreurs
 		perror("Error in writing pseudo");
@@ -99,21 +99,21 @@ void *sendMessage(void *arg){	// Fonction d'envoi des messages sur la socket
 	return NULL;
 }
 
-void *recvMessage(void *arg){
+void *recvMessage(void *arg){		// Fonction de réception des messages
 	int sockfd = *((int*)arg);
-	char buffer[BUF_SIZE];
-	int retval;
+	char buffer[BUF_SIZE];			// Buffer de réception
+	int retval;						// variable de gestion des erreurs
 
-	while(1){
-		bzero(buffer, BUF_SIZE);
-		retval = read(sockfd, buffer, BUF_SIZE);
+	while(1){						// Boucle infini pour la réception des erreurs
+		bzero(buffer, BUF_SIZE);	
+		retval = read(sockfd, buffer, BUF_SIZE);	// Lecture des données envoyées sur la socket
 		if(retval < 0){
 			perror("Reading Error");
 			exit(1);
 		}
 
-		if(strncmp(buffer, "exit", 4) == 0 || strlen(buffer)<1){
-			printf("> Tchat: %s\n", buffer);
+		if(strncmp(buffer, "exit", 4) == 0 || strlen(buffer)<1){	// On vérifie si le client a demandé la fermeture de la connexion
+			printf("> Tchat: %s\n", buffer);						// Affichage du message envoyé par le serveur
 			break;
 		}
 

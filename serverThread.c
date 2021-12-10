@@ -14,14 +14,14 @@ pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 int clientfd[NO_OF_CLIENTS];
 
 void* socketChat(void *arg){
-	char buffer[BUF_SIZE];
-	char temp[BUF_SIZE];
-	int retval;
+	char buffer[BUF_SIZE];		// Buffer de réception des données
+	char temp[BUF_SIZE];		//
+	int retval;					// Variable de gestion des erreurs
 	int clientfd = *((int*)arg);
-	char* pseudo = malloc(sizeof(char)*50);
- 	int targetclient=-1;
+	char* pseudo = malloc(sizeof(char)*50);	// Pseudo du client
+ 	int targetclient=-1;					// Client cible
  	int result = clientfd;
- 	char a = clientfd + '0';
+ 	char a = clientfd + '0';				
 
  	retval = write(clientfd, &a, 1);
  	if(retval < 0){

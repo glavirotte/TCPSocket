@@ -3,18 +3,20 @@
 #include<stdlib.h>
 #include<string.h>
 
+// Notre LinkedList nous permet de gérer dynamiquement l'ajout ou la suppression des clients 
+
 struct Llist{
-    int client_id;
-    char* client_pseudo;
-    struct Llist *next;
+    int client_id;        // Identifiant utilisé par le serveur pour désigner le client c
+    char* client_pseudo;  // Pseudo du client
+    struct Llist *next;   // Pointeur sur le client suivant
 };
 
-struct Llist *head = NULL,*tail = NULL;
+struct Llist *head = NULL,*tail = NULL; // Déclaration de la LinkedList
 
 
 void create(int c_id){
 
- struct Llist *nn = (struct Llist*)malloc(sizeof(struct Llist));
+ struct Llist *nn = (struct Llist*)malloc(sizeof(struct Llist));  // Création de la LinkedList allouée dynamiquement
 
  if(nn == NULL){
   printf("Error in allocating memory!");
@@ -35,7 +37,7 @@ void create(int c_id){
  }
 }
 
-void setPseudo(int c_id, char* c_pseudo){
+void setPseudo(int c_id, char* c_pseudo){   // Fonction qui écrit le pseudo du client c 
  
  if(head == NULL){
   printf("Linked list is empty!");
@@ -45,7 +47,7 @@ void setPseudo(int c_id, char* c_pseudo){
  struct Llist *ptr = head;
  struct Llist *prevptr = NULL;
  
- while(ptr != NULL){
+ while(ptr != NULL){              // Parcourt de la liste jusqu'à trouver le client
   if(ptr->client_id == c_id){
     ptr->client_pseudo = c_pseudo;
     return;
@@ -56,7 +58,7 @@ void setPseudo(int c_id, char* c_pseudo){
  }
 }
 
-void findandremove(int c_id){
+void findandremove(int c_id){   // Suppression du client c
  
  if(head == NULL){
   printf("Linked list is empty!");
@@ -66,14 +68,14 @@ void findandremove(int c_id){
  struct Llist *ptr = head;
  struct Llist *prevptr = NULL;
  
- while(ptr != NULL){
+ while(ptr != NULL){          // Parcourt de la liste jusqu'à trouver le client recherché
   if(ptr->client_id == c_id){
     
-   if(prevptr == NULL){ //if present in head
+   if(prevptr == NULL){
      head = head->next;
      if(head == NULL)
      	tail = NULL;
-     free(ptr);
+     free(ptr);               // Désallocation du client
      break;
    }else{
      prevptr->next = ptr->next;
@@ -87,7 +89,7 @@ void findandremove(int c_id){
  }
 }
 
-char* print(int c){
+char* print(int c){       // Fonction qui affiche le client voulu
  
  struct Llist *ptr = head;
  int i = 1;
@@ -108,7 +110,7 @@ char* print(int c){
    return result;
 }
 
-int isValid(int c, int clientfd){
+int isValid(int c, int clientfd){   // Vérification de la validité d'un client dans la liste
 	struct Llist *ptr = head;
 	while(ptr != NULL){
 	   if(ptr->client_id == c && ptr->client_id != clientfd){
@@ -119,7 +121,7 @@ int isValid(int c, int clientfd){
 	return 0;
 }
 
-char* getPseudoFromID(int c_id){
+char* getPseudoFromID(int c_id){    // Retourne le pseudo d'un client à partir de son identifiant
  
  if(head == NULL){
   printf("Linked list is empty!");
@@ -140,7 +142,7 @@ char* getPseudoFromID(int c_id){
 
 }
 
-int getIDFromPseudo(char * pseudo){
+int getIDFromPseudo(char * pseudo){   // Retourne l'identifiant du client à partir de son pseudo
  
  if(head == NULL){
   printf("Linked list is empty!");
@@ -161,7 +163,7 @@ int getIDFromPseudo(char * pseudo){
 
 }
 
-// Fonction complémentaire pour extraire le pseudo du reste des données
+// Fonction complémentaire pour extraire le pseudo du reste des données (pas de rapport avec la LinkedList)
 
 char* extractPseudo(char* buffer){
   char * pseudo = malloc(sizeof(char)*50);
