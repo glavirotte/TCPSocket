@@ -112,7 +112,7 @@ void *recvMessage(void *arg){		// Fonction de réception des messages
 			exit(1);
 		}
 
-		if(strncmp(buffer, "exit", 4) == 0 || strlen(buffer)<1){	// On vérifie si le client a demandé la fermeture de la connexion
+		if(strncmp(buffer, "Exit", 4) == 0 || strlen(buffer)<1){	// On vérifie si le client a demandé la fermeture de la connexion
 			printf("> Tchat: %s\n", buffer);						// Affichage du message envoyé par le serveur
 			break;
 		}
